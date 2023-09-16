@@ -1,0 +1,20 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true,
+        ".pre-commit-config.yaml": true,
+        ".devenv*": true,
+        ".direnv": true
+    },
+    "nix.enableLanguageServer": true,
+    "nixEnvSelector.nixFile": "${workspaceRoot}/devenv.nix",
+    "files.eol": "\n"
+}

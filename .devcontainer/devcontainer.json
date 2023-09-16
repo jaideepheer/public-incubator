@@ -1,0 +1,53 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/alpine
+{
+	"name": "Alpine",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/base:alpine-3.18",
+	
+	// Enable WSLg GUI support
+	"mounts": [
+		"type=bind,source=/run/desktop/mnt/host/wslg/.X11-unix,target=/tmp/.X11-unix",
+		"type=bind,source=/run/desktop/mnt/host/wslg,target=/mnt/wslg"
+	],
+	"containerEnv": {
+		"DISPLAY": ":0",
+		"WAYLAND_DISPLAY": "wayland-0",
+		"XDG_RUNTIME_DIR": "/mnt/wslg/runtime-dir",
+		"PULSE_SERVER": "/mnt/wslg/PulseServer"
+	},
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	"features": {
+		"ghcr.io/devcontainers/features/nix:1": {
+			"multiUser": true,
+			"version": "latest",
+			"extraNixConfig": "experimental-features = nix-command flakes"
+		},
+		"ghcr.io/devcontainers/features/git:1": {},
+		"ghcr.io/devcontainers-contrib/features/direnv:1": {}
+	},
+
+	// Configure tool-specific properties.
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"pinage404.nix-extension-pack",
+				"mkhl.direnv"
+			]
+		}
+	},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"onCreateCommand": {
+		"devenv_hook_bash":"echo 'eval \"$(direnv hook bash)\"' >> ~/.bashrc",
+		"devenv_hook_zsh":"echo 'eval \"$(direnv hook zsh)\"' >> ~/.zshrc",
+		"devenv": "sudo nix profile install nixpkgs#cachix && sudo cachix use devenv && sudo nix profile install --accept-flake-config tarball+https://install.devenv.sh/latest && devenv ci"
+	}
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}
